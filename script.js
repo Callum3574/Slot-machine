@@ -1,21 +1,19 @@
 let playerBalance = 1000;
 let machineBalance = 10000;
 function introToGame() {
-  //   alert("Welcome to the FRUIT MACHINE program!");
-  //   alert("-------------------------------------");
-  //   alert(
-  //     "The aim of the game is to PULL a lever and hope your slots match up with the Machines!"
-  //   );
-  //   alert("-------------------------------------");
-  //   alert("type 'PULL' to generate your selected slots!");
-  //   alert("-------------------------------------");
+  // alert("Welcome to the FRUIT MACHINE program!");
+  // alert("-------------------------------------");
+  // alert(
+  //   "The aim of the game is to PULL a lever and hope your slots match up with the Machines!"
+  // );
+  // alert("-------------------------------------");
+  // alert("type 'PULL' to generate your selected slots!");
+  // alert("-------------------------------------");
 
-  //   const pullLever = prompt(
-  //     "Are you ready? enter PULL now! ----- type exit to leave game"
-  //   ).toLowerCase();
-
+  // const pullLever = prompt(
+  //   "Are you ready? enter PULL now! ----- type exit to leave game"
+  // ).toLowerCase();
   const pullLever = "pull";
-
   return playGame(pullLever, playerBalance, machineBalance);
 }
 
@@ -55,7 +53,7 @@ function playGame(playerChoice, playerMoney, machineMoney) {
   const playerSlots = [
     { SLOT_1: "Black" },
     { SLOT_2: "Yellow" },
-    { SLOT_3: "Black" },
+    { SLOT_3: "Green" },
     { SLOT_4: "White" },
   ];
   if (playerChoice === "pull") {
@@ -72,10 +70,39 @@ function playGame(playerChoice, playerMoney, machineMoney) {
     });
   }
 
+  function checkIfAllDifferent(arr) {
+    const count = {};
+    for (const element of arr) {
+      if (count[element]) {
+        count[element] += 1;
+      } else {
+        count[element] = 1;
+      }
+    }
+    const valuesInCount = Object.values(count);
+    // accumlator = starting point, set to 0 as second passed value. Current value is each value of array. Each time it iterators through array, the current value will add on to the accumulator!
+    const sumOfCount = valuesInCount.reduce((accumulator, currentValue) => {
+      return accumulator + currentValue;
+    }, 0);
+
+    if (sumOfCount === 4) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   if (equalityCheck(playerSlots) == true) {
     playerMoney = playerMoney + machineMoney;
+    machineBalance = 0;
     alert(
       `WE HAVE A WINNER. 4 MATCHING SLOTS. ----- NEW BALANCE: ${playerMoney}`
+    );
+  } else if (checkIfAllDifferent(playerSlots) == true) {
+    playerMoney = playerMoney + machineMoney / 2;
+    machineMoney = machineMoney / 2;
+    alert(
+      `WE HAVE A WINNER. 4 DIFFERENT SLOTS. ----- NEW BALANCE: ${playerMoney}`
     );
   }
 }
