@@ -1,6 +1,6 @@
 let playerBalance = 1000;
 let machineBalance = 10000;
-function introToGame() {
+function introToGame(playerMoney, machineMoney) {
   // alert("Welcome to the FRUIT MACHINE program!");
   // alert("-------------------------------------");
   // alert(
@@ -13,8 +13,10 @@ function introToGame() {
   // const pullLever = prompt(
   //   "Are you ready? enter PULL now! ----- type exit to leave game"
   // ).toLowerCase();
+  alert(`Your current balance is: ${playerMoney} coins`);
+  const bet = prompt("Please enter your bet!");
   const pullLever = "pull";
-  return playGame(pullLever, playerBalance, machineBalance);
+  playGame(pullLever, playerMoney, machineMoney, bet);
 }
 
 function generateSlots() {
@@ -47,49 +49,49 @@ function generateSlots() {
   return slotsAsObj;
 }
 
-function playGame(playerChoice, playerMoney, machineMoney) {
-  alert(`Your current balance is: ${playerMoney} coins`);
-  //   const playerSlots = generateSlots();
+function equalityCheck(arr) {
+  const firstValue = Object.values(arr[0]).join("");
+  return arr.every(function (index) {
+    return Object.values(index).join("") === firstValue;
+  });
+}
+
+function checkIfAllDifferent(arr) {
+  const objAsArray = [];
+
+  const count = [{}];
+
+  for (let i = 0; i < arr.length; i++) {
+    objAsArray.push(Object.values(arr[i]).join(""));
+  }
+  for (const element of objAsArray) {
+    if (count[element]) {
+      count[element] += 1;
+    } else {
+      count[element] = 1;
+    }
+  }
+  const valuesInCount = Object.values(count);
+  // accumlator = starting point, set to 0 as second passed value. Current value is each value of array. Each time it iterators through array, the current value will add on to the accumulator!
+  const sumOfCount = valuesInCount.reduce((accumulator, currentValue) => {
+    return accumulator + currentValue;
+  }, 0);
+}
+
+function playGame(playerChoice, playerMoney, machineMoney, playerBet) {
+  // const playerSlots = [generateSlots();
+
   const playerSlots = [
-    { SLOT_1: "Black" },
-    { SLOT_2: "Yellow" },
-    { SLOT_3: "Green" },
-    { SLOT_4: "White" },
+    { SLOT_1: "Green" },
+    { SLOT_2: "Black" },
+    { SLOT_3: "Black" },
+    { SLOT_4: "Yellow" },
   ];
   if (playerChoice === "pull") {
-    // const playerSlots = generateSlots();
+    // alert(`Your slots are: ${playerSlots}`);
   } else if (playerChoice === "exit") {
     alert("GAME CANCELLED");
     return;
-  }
-
-  function equalityCheck(arr) {
-    const firstValue = Object.values(arr[0]).join("");
-    return arr.every(function (index) {
-      return Object.values(index).join("") === firstValue;
-    });
-  }
-
-  function checkIfAllDifferent(arr) {
-    const count = {};
-    for (const element of arr) {
-      if (count[element]) {
-        count[element] += 1;
-      } else {
-        count[element] = 1;
-      }
-    }
-    const valuesInCount = Object.values(count);
-    // accumlator = starting point, set to 0 as second passed value. Current value is each value of array. Each time it iterators through array, the current value will add on to the accumulator!
-    const sumOfCount = valuesInCount.reduce((accumulator, currentValue) => {
-      return accumulator + currentValue;
-    }, 0);
-
-    if (sumOfCount === 4) {
-      return true;
-    } else {
-      return false;
-    }
   }
 
   if (equalityCheck(playerSlots) == true) {
@@ -104,7 +106,9 @@ function playGame(playerChoice, playerMoney, machineMoney) {
     alert(
       `WE HAVE A WINNER. 4 DIFFERENT SLOTS. ----- NEW BALANCE: ${playerMoney}`
     );
+  } else {
+    return "LOSER";
   }
 }
 
-introToGame();
+introToGame(playerBalance, machineBalance);
