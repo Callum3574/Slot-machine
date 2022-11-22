@@ -1,23 +1,21 @@
-let playerBalance = 1000;
-let machineBalance = 5000000;
-// window.playerBalance = { balance: 5000 };
-// window.machineBalance = { balance: 50000 };
+window.playerBalance = 1000;
+window.machineBalance = 5000000;
 
-function introToGame(playerMoney, machineMoney) {
-  // alert("Welcome to the FRUIT MACHINE program!");
-  // alert("-------------------------------------");
-  // alert(
-  //   "The aim of the game is to PULL a lever and hope your slots match up with the Machines!"
-  // );
-  // alert("-------------------------------------");
-  // alert("type 'PULL' to generate your selected slots!");
-  // alert("-------------------------------------");
+function introToGame(playerMoney) {
+  alert("Welcome to the FRUIT MACHINE program!");
+  alert("-------------------------------------");
+  alert(
+    "The aim of the game is to PULL a lever and hope your slots match up with the Machines!"
+  );
+  alert("-------------------------------------");
+  alert("type 'PULL' to generate your selected slots!");
+  alert("-------------------------------------");
 
-  // const pullLever = prompt(
-  //   "Are you ready? enter PULL now! ----- type exit to leave game"
-  // ).toLowerCase();
-  alert(`Your current balance is: ${window.playerMoney} coins`);
-  playGame(playerMoney, machineMoney);
+  const pullLever = prompt(
+    "Are you ready? enter PULL now! ----- type exit to leave game"
+  ).toLowerCase();
+  alert(`Your current balance is: ${playerMoney} coins`);
+  playGame();
 }
 
 function generateSlots() {
@@ -73,6 +71,8 @@ function checkIfAllDifferent(arr) {
     }
   }
 
+  // console.log(count);
+
   // if these adds to 4, this means each index is different
   let singleOccurance = 0;
 
@@ -99,51 +99,47 @@ function checkForAdjacent(arr) {
   }
 }
 
-// const bet = prompt("Please enter your bet!");
-
-function playGame(playerMoney, machineMoney) {
-  console.log(playerMoney.balance);
+function playGame() {
+  //pre-game functionality -> selecting a bet and pulling the lever to generate slots.
   let playerSlots;
+  const bet = parseInt(prompt("please provide a bet"));
 
   const pullOrExit = prompt(
     "PULL THE LEVER!! ------ (type exit to quit...)"
   ).toLowerCase();
 
   if (pullOrExit === "pull") {
-    // playerSlots = generateSlots();
-    playerSlots = [
-      { SLOT_1: "White" },
-      { SLOT_2: "White" },
-      { SLOT_3: "Green" },
-      { SLOT_4: "Green" },
-    ];
+    playerSlots = generateSlots();
   } else if (pullOrExit === "exit") {
     alert(
-      `You have quit the game..... Goodbye! ------ You have walked away with ${window.playerMoney}`
+      `You have quit the game..... Goodbye! ------ You have walked away with ${window.playerBalance}`
     );
     return;
   }
+  //functionality of the game -> the comparison functions
 
+  //4 matching slots -> player wins all machine money
   if (equalityCheck(playerSlots) == true) {
-    window.playerMoney += window.machineMoney;
+    window.playerBalance += window.machineBalance;
     window.machineBalance = 0;
     alert(
-      `WE HAVE A WINNER. 4 MATCHING SLOTS. ----- NEW BALANCE: ${window.playerMoney}`
+      `WE HAVE A WINNER. 4 MATCHING SLOTS. ----- NEW BALANCE: ${window.playerBalance}`
     );
+    //4 different slots -> player wins half the machine money
   } else if (checkIfAllDifferent(playerSlots) == true) {
-    window.playerMoney += window.machineMoney / 2;
-    window.machineMoney += window.machineMoney / 2;
+    window.playerBalance += window.machineBalance / 2;
+    window.machineBalance += window.machineBalance / 2;
     alert(
-      `WE HAVE A WINNER. 4 DIFFERENT SLOTS. ----- NEW BALANCE: ${window.playerMoney}`
+      `WE HAVE A WINNER. 4 DIFFERENT SLOTS. ----- NEW BALANCE: ${window.playerBalance}`
     );
+    //2 matching adjacent slots -> player wins 5 x the bet
   } else if (checkForAdjacent(playerSlots) == true) {
-    const checkFor5X =
-      window.machineBalance >= window.machineBalance * 5 ? true : false;
+    const checkFor5X = window.machineBalance >= bet * 5 ? true : false;
     checkFor5X === true
-      ? (window.playerMoney += window.machineMoney * 5)
-      : window.playerMoney;
+      ? (window.playerBalance += bet * 5)
+      : window.playerBalance;
     alert(
-      `WE HAVE A WINNER. 2 ADJACENT SLOTS CONFIRMED. X5 PAYOUT ----> NEW BALANCE ${window.playerMoney}`
+      `WE HAVE A WINNER. 2 ADJACENT SLOTS CONFIRMED. X5 PAYOUT ----> NEW BALANCE ${window.playerBalance}`
     );
   } else {
     console.log("loser");
@@ -151,9 +147,7 @@ function playGame(playerMoney, machineMoney) {
 
   const playAgain = prompt("Would you like to play again?").toLowerCase();
 
-  playAgain === "yes"
-    ? playGame(playerMoney, machineMoney)
-    : alert("game over...");
+  playAgain === "yes" ? playGame() : alert("game over...");
 }
 
 introToGame(playerBalance, machineBalance);
